@@ -1,0 +1,148 @@
+* {
+    bg: #08090b;
+    fg: #e6e6e6;
+    muted: #707780;
+    accent: #00e6d0;
+    
+    background-color: @bg;
+    text-color: @fg;
+
+    font: "DejaVu Sans Mono 11";
+}
+
+window {
+    width: 560px;
+    height: 320px;
+
+    background-color: @bg;
+
+    border: 1px;
+    border-color: #24282d;
+
+    padding: 16px;
+}
+
+mainbox {
+    children: [inputbar, listview];
+    spacing: 10px;
+}
+
+inputbar {
+    children: [prompt, entry];
+
+    background-color: transparent;
+
+    border: 0;
+    padding: 4px 0px;
+}
+
+prompt {
+    text-color: @accent;
+    background-color: transparent;
+    padding: 0 8px 0 0;
+    str: "◆";
+}
+
+entry {
+    text-color: @fg;
+    background-color: transparent;
+    placeholder: "Search...";
+    placeholder-color: @muted;
+    padding: 0;
+    cursor-width: 0;
+}
+
+listview {
+    columns: 1;
+    lines: 7;
+    fixed-height: true;
+
+    spacing: 2px;
+    scrollbar: false;
+
+    background-color: transparent;
+    padding: 0;
+}
+
+element {
+    background-color: transparent;
+    padding: 7px 6px;
+    border: 0;
+}
+
+element-text {
+    text-color: @fg;
+}
+
+element selected {
+    background-color: transparent;
+    border: 0;
+}
+
+element selected element-text {
+    text-color: @accent;
+    font: "DejaVu Sans Mono Bold 11";
+}
+
+message {
+    background-color: transparent;
+    text-color: @muted;
+}
+
+/* FINAL Y2K OVERRIDES */
+
+window {
+    background-color: #08090b;
+    border: 1px;
+    border-color: #24282d;
+    padding: 16px;
+}
+
+inputbar {
+    background-color: transparent;
+    border: 0px;
+    padding: 4px 0px;
+}
+
+prompt {
+    background-color: transparent;
+    text-color: #00e6d0;
+}
+
+entry {
+    background-color: transparent;
+    text-color: #e6e6e6;
+}
+
+listview {
+    background-color: transparent;
+    spacing: 2px;
+}
+
+element {
+    background-color: transparent;
+    border: 0px;
+    padding: 7px 6px;
+}
+
+element selected,
+element selected.normal,
+element selected.active,
+element selected.urgent {
+    background-color: transparent;
+    border: 0px;
+}
+
+element-text {
+    background-color: transparent;
+    text-color: #e6e6e6;
+}
+
+element selected element-text,
+element selected.normal element-text,
+element selected.active element-text,
+element selected.urgent element-text {
+    background-color: transparent;
+    text-color: #00e6d0;
+    highlight: bold #00e6d0;
+}

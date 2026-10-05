@@ -1,0 +1,33 @@
+XTerm.VT100.translations: #override \
+Ctrl Shift <Key>V: insert-selection(CLIPBOARD) \n\
+Ctrl Shift <Key>C: copy-selection(CLIPBOARD)
+
+XTerm*faceName: DejaVu Sans Mono
+XTerm*faceSize: 11
+XTerm*renderFont: true
+
+XTerm*scrollBar: false
+XTerm*saveLines: 5000
+
+XTerm*selectToClipboard: false
+XTerm*highlightTextColor: #080808
+XTerm*highlightColor: #00ffcc
+
+XTerm*cursorShape: block
+XTerm*pointerShape: left_ptr
+
+XTerm*bellIsUrgent: false
+XTerm*visualBell: false
+
+XTerm*background: #0B0C0F
+XTerm*foreground: #E6E6E6
+XTerm*cursorColor: #00E6D0
+
+XTerm*color0: #0B0C0F
+XTerm*color7: #E6E6E6
+XTerm*color8: #707780
+XTerm*color14: #00E6D0
+XTerm*color15: #FFFFFF
+
+XTerm*title: FREEBSD // TERMINAL
+XTerm*iconName: FREEBSD

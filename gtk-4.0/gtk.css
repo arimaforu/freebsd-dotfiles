@@ -1,0 +1,130 @@
+/* ===== FREEBSD Y2K GTK ===== */
+
+window {
+    background-color: #0b0c0f;
+    color: #e6e6e6;
+}
+
+headerbar {
+    background: #0b0c0f;
+    color: #e6e6e6;
+
+    min-height: 28px;
+    padding: 3px 7px;
+
+    border: none;
+    box-shadow: none;
+}
+
+headerbar title {
+    color: #00e6d0;
+    font-weight: bold;
+}
+
+button {
+    background: #111317;
+    color: #e6e6e6;
+
+    border: 1px solid #272b31;
+    border-radius: 4px;
+
+    padding: 4px 8px;
+}
+
+button:hover {
+    background: #171b20;
+    border-color: #00e6d0;
+}
+
+button:checked,
+button:active {
+    background: #15191c;
+    color: #00e6d0;
+    border-color: #00e6d0;
+}
+
+entry,
+searchentry {
+    background: #0f1114;
+    color: #e6e6e6;
+
+    border: 1px solid #272b31;
+    border-radius: 4px;
+
+    padding: 5px 7px;
+}
+
+entry:focus,
+searchentry:focus {
+    border-color: #00e6d0;
+}
+
+treeview,
+.view {
+    background: #0b0c0f;
+    color: #e6e6e6;
+}
+
+treeview:selected,
+.view:selected {
+    background: #15191c;
+    color: #00e6d0;
+}
+
+treeview:hover,
+.view:hover {
+    background: #111419;
+}
+
+.sidebar {
+    background: #0f1114;
+    color: #d7dbde;
+}
+
+.sidebar row:selected {
+    background: #15191c;
+    color: #00e6d0;
+}
+
+.sidebar row:hover {
+    background: #13161a;
+}
+
+toolbar {
+    background: #0b0c0f;
+    border: none;
+}
+
+menubar,
+menu {
+    background: #0b0c0f;
+    color: #e6e6e6;
+}
+
+menuitem {
+    padding: 5px 8px;
+}
+
+menuitem:hover {
+    background: #15191c;
+    color: #00e6d0;
+}
+
+scrollbar {
+    background: #0b0c0f;
+}
+
+scrollbar slider {
+    background: #30353c;
+    border-radius: 4px;
+}
+
+scrollbar slider:hover {
+    background: #00e6d0;
+}
+
+tooltip {
+    background: #111317;
+    color: #e6e6e6;
+    border: 1px solid #272b31;
+}

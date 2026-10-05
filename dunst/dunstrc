@@ -1,0 +1,55 @@
+[global]
+
+monitor = 0
+follow = none
+
+width = 360
+height = (0, 90)
+
+origin = top-right
+offset = (12, 12)
+
+frame_width = 1
+frame_color = "#00E6D0"
+
+background = "#0B0C0F"
+foreground = "#E6E6E6"
+
+font = "DejaVu Sans 10"
+
+padding = 10
+horizontal_padding = 12
+text_icon_padding = 8
+
+separator_height = 0
+separator_color = frame
+
+corner_radius = 8
+
+icon_position = left
+max_icon_size = 32
+
+transparency = 0
+
+sort = urgency_ascending
+
+markup = full
+indicate_hidden = yes
+
+[urgency_low]
+background = "#0B0C0F"
+foreground = "#707780"
+frame_color = "#272B31"
+timeout = 3
+
+[urgency_normal]
+background = "#0B0C0F"
+foreground = "#E6E6E6"
+frame_color = "#00E6D0"
+timeout = 4
+
+[urgency_critical]
+background = "#0B0C0F"
+foreground = "#E6E6E6"
+frame_color = "#FF5C7A"
+timeout = 0

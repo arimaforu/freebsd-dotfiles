@@ -1,0 +1,110 @@
+# Terminal
+super + Return
+    xterm
+
+# Power menu
+super + shift + p
+    ~/.config/rofi/scripts/power-menu.sh
+
+Print
+    ~/.config/bspwm/scripts/screenshot.sh full
+
+shift + Print
+    ~/.config/bspwm/scripts/screenshot.sh area
+
+alt + Print
+    ~/.config/bspwm/scripts/screenshot.sh window
+
+super + e
+    thunar
+
+# Rofi
+ctrl + alt + d
+    rofi -show drun -theme ~/.config/rofi/theme.rasi
+
+# Close window
+super + shift + q
+    bspc node -c
+
+# Focus
+super + h
+    bspc node -f west
+
+super + j
+    bspc node -f south
+
+super + k
+    bspc node -f north
+
+super + l
+    bspc node -f east
+
+# Move window
+super + shift + h
+    bspc node -s west
+
+super + shift + j
+    bspc node -s south
+
+super + shift + k
+    bspc node -s north
+
+super + shift + l
+    bspc node -s east
+
+# Workspaces
+super + 1
+    bspc desktop -f '^1'
+
+super + 2
+    bspc desktop -f '^2'
+
+super + 3
+    bspc desktop -f '^3'
+
+super + 4
+    bspc desktop -f '^4'
+
+super + 5
+    bspc desktop -f '^5'
+
+super + 6
+    bspc desktop -f '^6'
+
+super + 7
+    bspc desktop -f '^7'
+
+super + 8
+    bspc desktop -f '^8'
+
+super + 9
+    bspc desktop -f '^9'
+
+# Move window to workspace
+super + shift + 1
+    bspc node -d '^1'
+
+super + shift + 2
+    bspc node -d '^2'
+
+super + shift + 3
+    bspc node -d '^3'
+
+super + shift + 4
+    bspc node -d '^4'
+
+# Floating
+super + shift + space
+    bspc node -t ~floating
+
+# File search
+ctrl + alt + f
+    ~/.config/rofi/scripts/file-search.sh
+
+# Window switcher
+ctrl + alt + w
+    ~/.config/rofi/scripts/window-switcher.sh
+
+# Workspace switcher
+ctrl + alt + s
+    ~/.config/rofi/scripts/workspace-switcher.sh
