@@ -1,27 +1,60 @@
 # FreeBSD Dotfiles
 
-My personal FreeBSD desktop configuration.
+My personal **FreeBSD 15.1** desktop configuration.
 
-A dark Y2K / UNIX-inspired setup built around **bspwm**, **sxhkd**, and **Polybar**.
+A dark **Y2K / UNIX-inspired** setup built around `bspwm`, `sxhkd`, and `Polybar`.
 
-## Components
+The goal of this repository is to make it possible to reproduce the desktop on a **fresh FreeBSD installation** without having to guess which packages or settings are required.
+
+> Tested on **FreeBSD 15.1 amd64**, primarily inside VMware.
+
+---
+
+## Preview
+
+Add a screenshot to the repository later as:
+
+```text
+screenshot.png
+```
+
+The desktop is built from:
+
+```text
+FreeBSD
+├── bspwm
+├── sxhkd
+├── Polybar
+├── Rofi
+├── Dunst
+├── Picom
+├── XTerm
+└── GTK / Yaru Dark
+```
+
+---
+
+## Main Components
 
 | Component | Software |
 |---|---|
 | OS | FreeBSD 15.1 |
 | Window Manager | bspwm |
 | Hotkeys | sxhkd |
-| Bar | Polybar |
-| Launcher | Rofi |
+| Status Bar | Polybar |
+| Application Launcher | Rofi |
 | Notifications | Dunst |
 | Terminal | xterm |
 | File Manager | Thunar |
 | Browser | Firefox |
 | Compositor | Picom |
 | Wallpaper | feh |
+| Screenshots | scrot |
 | GTK Theme | Matcha Dark |
 | Icons | Yaru Dark |
-| Font | DejaVu Sans |
+| Fonts | DejaVu Sans / Font Awesome |
+
+---
 
 ## Features
 
@@ -29,15 +62,20 @@ A dark Y2K / UNIX-inspired setup built around **bspwm**, **sxhkd**, and **Polyba
 - Cyan accent color
 - 9 bspwm workspaces
 - Rofi application launcher
-- EN / RU keyboard layout switching
+- EN / RU keyboard switching with `Alt + Shift`
 - Network upload/download speed
 - Volume and mute indicator
 - CPU and RAM usage
-- Windows-style date and time
+- Date and time
 - Dunst notifications
 - Screenshot shortcuts
 - Thunar file manager
-- VMware clipboard integration
+- Custom XTerm appearance
+- Power menu
+- VMware guest integration
+- Configuration stored in one Git repository
+
+---
 
 ## Color Scheme
 
@@ -49,51 +87,837 @@ Border      #272B31
 Accent      #00E6D0
 ```
 
-## Keybindings
+---
 
-### Applications
+# Installation on a Fresh FreeBSD System
 
-| Shortcut | Action |
-|---|---|
-| `Super + Enter` | Terminal |
-| `Super + Shift + P` | Power menu |
-| `Super + E` | File manager |
-| `Ctrl + Alt + D` | Rofi launcher |
+This section is intended for a newly installed FreeBSD system with no desktop environment configured yet.
 
-### Windows
+The instructions assume:
 
-| Shortcut | Action |
-|---|---|
-| `Super + Shift + Q` | Close window |
-| `Super + H/J/K/L` | Focus window |
-| `Super + Shift + H/J/K/L` | Move window |
-| `Super + Shift + Space` | Toggle floating |
+- FreeBSD **15.x amd64**
+- A normal user account
+- Working Internet access
+- You are currently working from a TTY/console
+- You want to start X11 with `startx`
+- KDE, GNOME, XFCE, or another desktop environment is not installed
 
-### Workspaces
+The examples below use:
 
-| Shortcut | Action |
-|---|---|
-| `Super + 1..9` | Switch workspace |
-| `Super + Shift + 1..9` | Move window to workspace |
+```text
+YOUR_USERNAME
+```
 
-### Screenshots
+Replace it with your actual FreeBSD username.
 
-| Shortcut | Action |
-|---|---|
-| `Print` | Full screen |
-| `Shift + Print` | Select area |
-| `Alt + Print` | Active window |
+---
 
-## Installation
+## 1. Log in as your normal user
 
-Clone the repository:
+For example:
+
+```text
+login: user
+password: ********
+```
+
+Check the system:
 
 ```sh
+uname -a
+```
+
+You should see FreeBSD information.
+
+Check your username:
+
+```sh
+whoami
+```
+
+Remember this username for the `wheel` and `video` group steps below.
+
+---
+
+## 2. Become root
+
+FreeBSD does not require `sudo` for the base installation.
+
+Run:
+
+```sh
+su -
+```
+
+Enter the root password.
+
+---
+
+## 3. Update the package repository
+
+As root:
+
+```sh
+pkg update
+pkg upgrade
+```
+
+Install Git:
+
+```sh
+pkg install -y git
+```
+
+Return to your normal user:
+
+```sh
+exit
+```
+
+---
+
+## 4. Clone the repository
+
+As your normal user:
+
+```sh
+cd ~
 git clone https://github.com/arimaforu/freebsd-dotfiles.git
 cd freebsd-dotfiles
 ```
 
-Copy the configurations:
+Check the repository:
+
+```sh
+ls
+```
+
+You should see files such as:
+
+```text
+.Xresources
+.xinitrc
+README.md
+bspwm/
+sxhkd/
+polybar/
+rofi/
+dunst/
+gtk-3.0/
+gtk-4.0/
+```
+
+---
+
+# 5. Install the required software
+
+Become root again:
+
+```sh
+su -
+```
+
+Install the complete X11 desktop stack used by the configuration:
+
+```sh
+pkg install -y \
+    xorg \
+    xinit \
+    setxkbmap \
+    xrdb \
+    xsetroot \
+    bspwm \
+    sxhkd \
+    polybar \
+    rofi \
+    dunst \
+    libnotify \
+    xterm \
+    thunar \
+    firefox \
+    picom \
+    feh \
+    scrot \
+    xdotool \
+    wmctrl \
+    xdg-utils \
+    font-awesome \
+    matcha-gtk-themes \
+    yaru-icon-theme \
+    dbus \
+    doas
+```
+
+These packages cover the commands and applications referenced directly by the dotfiles.
+
+In particular:
+
+- `setxkbmap` is used by `.xinitrc`
+- `xrdb` loads `.Xresources`
+- `xsetroot` is used by `bspwmrc`
+- `xdotool` is used by the Polybar window controls
+- `wmctrl` is used by the Rofi window switcher
+- `xdg-utils` provides `xdg-open`
+- `libnotify` provides `notify-send`
+
+---
+
+# 6. Add your user to `wheel` and `video`
+
+The graphical X11 session requires the user to be a member of the `video` group.
+
+As root:
+
+```sh
+pw groupmod wheel -m YOUR_USERNAME
+pw groupmod video -m YOUR_USERNAME
+```
+
+Verify later after logging in again with:
+
+```sh
+groups
+```
+
+You should see at least:
+
+```text
+wheel video
+```
+
+Log out and log back in after changing the groups.
+
+---
+
+# 7. Enable D-Bus
+
+D-Bus provides desktop integration used by various X11 and GTK applications.
+
+As root:
+
+```sh
+sysrc dbus_enable="YES"
+service dbus start
+```
+
+---
+
+# 8. Configure `doas`
+
+The power menu uses `doas` for shutdown and reboot.
+
+Create the configuration:
+
+```sh
+echo 'permit persist :wheel' > /usr/local/etc/doas.conf
+chmod 600 /usr/local/etc/doas.conf
+```
+
+After returning to your normal user, test it with:
+
+```sh
+doas id
+```
+
+Enter your password when requested.
+
+The command should report that the command is running as root.
+
+---
+
+# 9. VMware support
+
+The current `bspwm/bspwmrc` starts:
+
+```sh
+/usr/local/bin/vmtoolsd -n vmusr &
+```
+
+Because of this, the current configuration expects VMware Tools to be installed.
+
+For a VMware virtual machine, install:
+
+```sh
+pkg install -y \
+    open-vm-tools \
+    xf86-video-vmware \
+    xf86-input-vmmouse
+```
+
+Then return to your normal user:
+
+```sh
+exit
+```
+
+For a physical computer or another hypervisor, the `vmtoolsd` line in `~/.config/bspwm/bspwmrc` should be removed or changed to a conditional command.
+
+The rest of the dotfiles do not depend on VMware.
+
+---
+
+# 10. Install the dotfiles
+
+Return to your normal user:
+
+```sh
+exit
+```
+
+Go to the repository:
+
+```sh
+cd ~/freebsd-dotfiles
+```
+
+Create the configuration directory:
+
+```sh
+mkdir -p ~/.config
+```
+
+Copy the desktop configurations:
+
+```sh
+cp -r bspwm ~/.config/
+cp -r sxhkd ~/.config/
+cp -r polybar ~/.config/
+cp -r rofi ~/.config/
+cp -r dunst ~/.config/
+cp -r gtk-3.0 ~/.config/
+cp -r gtk-4.0 ~/.config/
+```
+
+Copy the X11 configuration:
+
+```sh
+cp .xinitrc ~/
+cp .Xresources ~/
+```
+
+---
+
+# 11. Create user directories
+
+The configuration expects a wallpaper and a screenshot directory.
+
+Create them:
+
+```sh
+mkdir -p ~/Pictures/Wallpapers
+mkdir -p ~/Pictures/Screenshots
+```
+
+The current `bspwmrc` expects the wallpaper at:
+
+```text
+~/Pictures/Wallpapers/y2k.jpg
+```
+
+The wallpaper itself is **not included in this repository**.
+
+Put your own wallpaper there:
+
+```text
+~/Pictures/Wallpapers/y2k.jpg
+```
+
+If that file does not exist, `feh` will report an error when bspwm starts, but the rest of the desktop can still run.
+
+---
+
+# 12. Make scripts executable
+
+Run:
+
+```sh
+chmod +x ~/.xinitrc
+chmod +x ~/.config/bspwm/bspwmrc
+
+find ~/.config/bspwm/scripts -type f -exec chmod +x {} \;
+find ~/.config/polybar/scripts -type f -exec chmod +x {} \;
+find ~/.config/rofi/scripts -type f -exec chmod +x {} \;
+```
+
+---
+
+# 13. Optional: initialize the `locate` database
+
+The Rofi file-search script uses `locate`.
+
+If `locate` does not return any files on a new system, update the database as root:
+
+```sh
+su -
+locate.updatedb
+exit
+```
+
+The file search command is:
+
+```text
+Ctrl + Alt + F
+```
+
+---
+
+# 14. Check `.xinitrc`
+
+The repository provides:
+
+```sh
+xrdb -merge ~/.Xresources
+
+setxkbmap -layout us,ru -option grp:alt_shift_toggle
+
+exec bspwm
+```
+
+This does three things:
+
+1. Loads the XTerm/X11 settings
+2. Enables US/Russian keyboard layouts
+3. Starts bspwm
+
+Normally you do not need to edit this file.
+
+---
+
+# 15. Start the graphical desktop
+
+From the TTY, run:
+
+```sh
+startx
+```
+
+The session should start with:
+
+- bspwm
+- sxhkd
+- Polybar
+- Rofi
+- Dunst
+- Picom
+- feh wallpaper
+- GTK settings
+- XTerm configuration
+
+If everything is installed correctly, you should be dropped directly into the bspwm desktop.
+
+---
+
+# Keybindings
+
+## Applications
+
+| Shortcut | Action |
+|---|---|
+| `Super + Enter` | Open terminal |
+| `Super + E` | Open Thunar |
+| `Ctrl + Alt + D` | Rofi application launcher |
+| `Super + Shift + P` | Power menu |
+| `Ctrl + Alt + F` | File search |
+| `Ctrl + Alt + W` | Window switcher |
+| `Ctrl + Alt + S` | Workspace switcher |
+
+`Super` normally means the Windows key.
+
+---
+
+## Windows
+
+| Shortcut | Action |
+|---|---|
+| `Super + Shift + Q` | Close window |
+| `Super + H` | Focus left |
+| `Super + J` | Focus down |
+| `Super + K` | Focus up |
+| `Super + L` | Focus right |
+| `Super + Shift + H` | Move window left |
+| `Super + Shift + J` | Move window down |
+| `Super + Shift + K` | Move window up |
+| `Super + Shift + L` | Move window right |
+| `Super + Shift + Space` | Toggle floating |
+
+---
+
+## Workspaces
+
+There are 9 workspaces:
+
+| Shortcut | Action |
+|---|---|
+| `Super + 1..9` | Switch workspace |
+| `Super + Shift + 1..4` | Move current window to workspace 1-4 |
+
+### Important
+
+The current `sxhkdrc` only defines window-move shortcuts for workspaces **1-4**.
+
+Workspaces **5-9** can still be selected with:
+
+```text
+Super + 5..9
+```
+
+or through the workspace switcher:
+
+```text
+Ctrl + Alt + S
+```
+
+---
+
+## Screenshots
+
+| Shortcut | Action |
+|---|---|
+| `Print` | Full-screen screenshot |
+| `Shift + Print` | Select an area |
+| `Alt + Print` | Active window |
+
+Screenshots are saved to:
+
+```text
+~/Pictures/Screenshots/
+```
+
+---
+
+## Keyboard Layout
+
+```text
+Alt + Shift
+```
+
+Switches between:
+
+```text
+EN
+RU
+```
+
+The layout configuration is defined in `.xinitrc`.
+
+---
+
+# Power Menu
+
+`Super + Shift + P` opens the Rofi power menu.
+
+The intended actions are:
+
+```text
+Shutdown
+Reboot
+Logout
+```
+
+The current power-menu script also contains a `Lock` entry, but no lock command is implemented for it yet.
+
+Shutdown and reboot use `doas`.
+
+---
+
+# File Structure
+
+```text
+freebsd-dotfiles/
+├── .Xresources
+├── .xinitrc
+├── README.md
+├── bspwm/
+│   ├── bspwmrc
+│   └── scripts/
+│       └── screenshot.sh
+├── sxhkd/
+│   └── sxhkdrc
+├── polybar/
+│   ├── config.ini
+│   └── scripts/
+│       ├── network.sh
+│       ├── volume.sh
+│       └── window-title.sh
+├── rofi/
+│   ├── theme.rasi
+│   └── scripts/
+│       ├── file-search.sh
+│       ├── power-menu.sh
+│       ├── window-switcher.sh
+│       └── workspace-switcher.sh
+├── dunst/
+│   └── dunstrc
+├── gtk-3.0/
+│   ├── settings.ini
+│   └── gtk.css
+└── gtk-4.0/
+    ├── settings.ini
+    └── gtk.css
+```
+
+---
+
+# Troubleshooting
+
+## `startx` does not start bspwm
+
+Check the X11 startup file:
+
+```sh
+ls -l ~/.xinitrc
+```
+
+Make it executable:
+
+```sh
+chmod +x ~/.xinitrc
+```
+
+Check that bspwm is installed:
+
+```sh
+which bspwm
+```
+
+Then try:
+
+```sh
+startx
+```
+
+If X starts but bspwm does not, check:
+
+```sh
+cat ~/.xinitrc
+```
+
+---
+
+## `startx` says `setxkbmap: not found`
+
+Install the package:
+
+```sh
+su -
+pkg install -y setxkbmap
+exit
+```
+
+---
+
+## Polybar does not start
+
+Check:
+
+```sh
+which polybar
+```
+
+Test it manually from inside X:
+
+```sh
+polybar y2k
+```
+
+Look at the error printed in the terminal.
+
+Also check the configuration file:
+
+```sh
+~/.config/polybar/config.ini
+```
+
+---
+
+## bspwm starts but hotkeys do not work
+
+Check sxhkd:
+
+```sh
+pgrep -af sxhkd
+```
+
+Start it manually:
+
+```sh
+sxhkd &
+```
+
+If it still does not work, check:
+
+```sh
+~/.config/sxhkd/sxhkdrc
+```
+
+---
+
+## Rofi does not start
+
+Check:
+
+```sh
+which rofi
+```
+
+Test:
+
+```sh
+rofi -show drun
+```
+
+If the themed launcher fails, test the default launcher first:
+
+```sh
+rofi -show drun
+```
+
+---
+
+## File search does not find anything
+
+The file-search script uses `locate`.
+
+As root:
+
+```sh
+locate.updatedb
+```
+
+Then try:
+
+```text
+Ctrl + Alt + F
+```
+
+---
+
+## Window switcher does not work
+
+The window switcher uses `wmctrl`.
+
+Check:
+
+```sh
+which wmctrl
+```
+
+If it is missing:
+
+```sh
+su -
+pkg install -y wmctrl
+exit
+```
+
+---
+
+## `xdg-open` is not found
+
+Install `xdg-utils`:
+
+```sh
+su -
+pkg install -y xdg-utils
+exit
+```
+
+---
+
+## Notifications do not appear
+
+Check Dunst:
+
+```sh
+pgrep -af dunst
+```
+
+Test it:
+
+```sh
+notify-send "FREEBSD" "Notification test"
+```
+
+If `notify-send` is missing:
+
+```sh
+su -
+pkg install -y libnotify
+exit
+```
+
+---
+
+## Black screen after `startx`
+
+Try:
+
+```text
+Ctrl + Alt + Backspace
+```
+
+Then check the Xorg log:
+
+```sh
+grep EE ~/.local/share/xorg/Xorg.0.log
+```
+
+Also check:
+
+```sh
+pkg info xorg
+```
+
+On a normal installation, Xorg should be able to configure common hardware automatically. Avoid creating a custom `xorg.conf` unless automatic configuration actually fails.
+
+---
+
+## VMware integration does not work
+
+Check:
+
+```sh
+which vmtoolsd
+```
+
+Expected path:
+
+```text
+/usr/local/bin/vmtoolsd
+```
+
+If it is missing:
+
+```sh
+su -
+pkg install -y open-vm-tools xf86-video-vmware xf86-input-vmmouse
+exit
+```
+
+Then restart the X session.
+
+---
+
+# Updating the Configuration
+
+After changing files in the repository:
+
+```sh
+cd ~/freebsd-dotfiles
+git status
+git add .
+git commit -m "Update configuration"
+git push
+```
+
+On another machine:
+
+```sh
+cd ~/freebsd-dotfiles
+git pull
+```
+
+Then copy the updated files into your home directory again:
 
 ```sh
 cp -r bspwm ~/.config/
@@ -108,36 +932,46 @@ cp .xinitrc ~/
 cp .Xresources ~/
 ```
 
-Install the required packages:
-
-```sh
-sudo pkg install \
-    bspwm \
-    sxhkd \
-    polybar \
-    rofi \
-    dunst \
-    xterm \
-    thunar \
-    firefox \
-    picom \
-    feh \
-    scrot \
-    font-awesome \
-    matcha-gtk-themes \
-    yaru-icon-theme
-```
-
-Start X:
+Restart X afterward:
 
 ```sh
 startx
 ```
 
-## Notes
+---
 
-This configuration was made for my personal FreeBSD VM and may require adjustments for different hardware, displays, or VMware settings.
+# Notes
+
+This is a **personal FreeBSD desktop configuration**, not a universal FreeBSD desktop distribution.
+
+It was created and tested on:
+
+```text
+FreeBSD 15.1 amd64
+```
+
+primarily inside VMware.
+
+Depending on the machine, you may need to adjust:
+
+- display resolution
+- keyboard layout
+- graphics drivers
+- VMware settings
+- wallpaper path
+- hardware-specific settings
+- user-specific paths
+
+The configuration intentionally uses a relatively small X11 stack instead of a full desktop environment such as KDE Plasma or GNOME.
 
 ---
 
-Made with FreeBSD, bspwm, and too much time spent tweaking pixels.
+# License
+
+Use, modify, copy, and break it however you want.
+
+This repository exists primarily so I can reproduce my FreeBSD setup without configuring everything from scratch again.
+
+---
+
+Made with **FreeBSD**, **bspwm**, and too much time spent tweaking pixels.
