@@ -10,30 +10,6 @@ The goal of this repository is to make it possible to reproduce the desktop on a
 
 ---
 
-## Preview
-
-Add a screenshot to the repository later as:
-
-```text
-screenshot.png
-```
-
-The desktop is built from:
-
-```text
-FreeBSD
-├── bspwm
-├── sxhkd
-├── Polybar
-├── Rofi
-├── Dunst
-├── Picom
-├── XTerm
-└── GTK / Yaru Dark
-```
-
----
-
 ## Main Components
 
 | Component | Software |
@@ -74,18 +50,6 @@ FreeBSD
 - Power menu
 - VMware guest integration
 - Configuration stored in one Git repository
-
----
-
-## Color Scheme
-
-```text
-Background  #0B0C0F
-Foreground  #E6E6E6
-Muted       #707780
-Border      #272B31
-Accent      #00E6D0
-```
 
 ---
 
@@ -220,32 +184,7 @@ su -
 Install the complete X11 desktop stack used by the configuration:
 
 ```sh
-pkg install -y \
-    xorg \
-    xinit \
-    setxkbmap \
-    xrdb \
-    xsetroot \
-    bspwm \
-    sxhkd \
-    polybar \
-    rofi \
-    dunst \
-    libnotify \
-    xterm \
-    thunar \
-    firefox \
-    picom \
-    feh \
-    scrot \
-    xdotool \
-    wmctrl \
-    xdg-utils \
-    font-awesome \
-    matcha-gtk-themes \
-    yaru-icon-theme \
-    dbus \
-    doas
+pkg install -y xorg xinit setxkbmap xrdb xsetroot bspwm sxhkd polybar rofi dunst libnotify xterm thunar firefox picom feh scrot xdotool wmctrl xdg-utils font-awesome matcha-gtk-themes yaru-icon-theme dbus doas
 ```
 
 These packages cover the commands and applications referenced directly by the dotfiles.
@@ -637,48 +576,6 @@ Logout
 The current power-menu script also contains a `Lock` entry, but no lock command is implemented for it yet.
 
 Shutdown and reboot use `doas`.
-
----
-
-# Updating the Configuration
-
-After changing files in the repository:
-
-```sh
-cd ~/freebsd-dotfiles
-git status
-git add .
-git commit -m "Update configuration"
-git push
-```
-
-On another machine:
-
-```sh
-cd ~/freebsd-dotfiles
-git pull
-```
-
-Then copy the updated files into your home directory again:
-
-```sh
-cp -r bspwm ~/.config/
-cp -r sxhkd ~/.config/
-cp -r polybar ~/.config/
-cp -r rofi ~/.config/
-cp -r dunst ~/.config/
-cp -r gtk-3.0 ~/.config/
-cp -r gtk-4.0 ~/.config/
-
-cp .xinitrc ~/
-cp .Xresources ~/
-```
-
-Restart X afterward:
-
-```sh
-startx
-```
 
 ---
 
