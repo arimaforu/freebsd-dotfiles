@@ -441,49 +441,7 @@ find ~/.config/rofi/scripts -type f -exec chmod +x {} \;
 
 ---
 
-# 13. Optional: initialize the `locate` database
-
-The Rofi file-search script uses `locate`.
-
-If `locate` does not return any files on a new system, update the database as root:
-
-```sh
-su -
-locate.updatedb
-exit
-```
-
-The file search command is:
-
-```text
-Ctrl + Alt + F
-```
-
----
-
-# 14. Check `.xinitrc`
-
-The repository provides:
-
-```sh
-xrdb -merge ~/.Xresources
-
-setxkbmap -layout us,ru -option grp:alt_shift_toggle
-
-exec bspwm
-```
-
-This does three things:
-
-1. Loads the XTerm/X11 settings
-2. Enables US/Russian keyboard layouts
-3. Starts bspwm
-
-Normally you do not need to edit this file.
-
----
-
-# 15. Start the graphical desktop
+# 13. Start the graphical desktop
 
 From the TTY, run:
 
@@ -504,6 +462,68 @@ The session should start with:
 - XTerm configuration
 
 If everything is installed correctly, you should be dropped directly into the bspwm desktop.
+
+---
+
+# 14. Optional: update the `locate` database
+
+The Rofi file-search script uses `locate`.
+
+On a fresh FreeBSD installation, the `locate` database may not have been generated yet. FreeBSD provides the update utility at:
+
+```text
+/usr/libexec/locate.updatedb
+```
+
+Run it as root:
+
+```sh
+su -
+/usr/libexec/locate.updatedb
+exit
+```
+
+You can then test it with:
+
+```sh
+locate xterm
+```
+
+The file search shortcut is:
+
+```text
+Ctrl + Alt + F
+```
+
+FreeBSD normally rebuilds the `locate` database periodically, so this step is optional rather than required for the initial desktop installation.
+
+---
+
+# 15. Check `.xinitrc` after the first `startx`
+
+The repository provides:
+
+```sh
+xrdb -merge ~/.Xresources
+
+setxkbmap -layout us,ru -option grp:alt_shift_toggle
+
+exec bspwm
+```
+
+This does three things:
+
+1. Loads the XTerm/X11 settings
+2. Enables US/Russian keyboard layouts
+3. Starts bspwm
+
+Normally you do not need to edit this file.
+
+If `startx` fails, inspect it from the TTY:
+
+```sh
+cat ~/.xinitrc
+```
 
 ---
 
