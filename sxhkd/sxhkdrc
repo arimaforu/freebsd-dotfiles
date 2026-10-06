@@ -2,6 +2,10 @@
 super + Return
     xterm
 
+# Display resolution
+ctrl + alt + r
+    ~/.config/rofi/scripts/resolution.sh
+
 # Notification history
 ctrl + alt + n
     ~/.config/rofi/scripts/notification-history.sh
