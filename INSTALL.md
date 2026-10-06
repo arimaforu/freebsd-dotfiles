@@ -1,78 +1,33 @@
 # FreeBSD Dotfiles — Installation
 
-Complete installation guide for setting up these dotfiles on a fresh FreeBSD system.
+Installation guide for setting up these dotfiles on a fresh FreeBSD 15.x amd64 system.
 
 > Tested on **FreeBSD 15.1 amd64**, primarily inside VMware.
 
 ---
 
-## Installation on a Fresh FreeBSD System
-
-This section is intended for a newly installed FreeBSD system with no desktop environment configured yet.
+## Requirements
 
 The instructions assume:
 
-- FreeBSD **15.x amd64**
+- FreeBSD 15.x amd64
 - A normal user account
 - Working Internet access
-- You are currently working from a TTY/console
-- You want to start X11 with `startx`
-- KDE, GNOME, XFCE, or another desktop environment is not installed
-
-The examples below use:
-
-```text
-YOUR_USERNAME
-```
-
-Replace it with your actual FreeBSD username.
+- Access to a TTY/console
+- `startx` will be used to start the X11 session
+- No full desktop environment is required
 
 ---
 
-## 1. Log in as your normal user
+## 1. Update the system and install Git
 
-For example:
-
-```text
-login: user
-password: ********
-```
-
-Check the system:
-
-```sh
-uname -a
-```
-
-You should see FreeBSD information.
-
-Check your username:
-
-```sh
-whoami
-```
-
-Remember this username for the `wheel` and `video` group steps below.
-
----
-
-## 2. Become root
-
-FreeBSD does not require `sudo` for the base installation.
-
-Run:
+Become root:
 
 ```sh
 su -
 ```
 
-Enter the root password.
-
----
-
-## 3. Update the package repository
-
-As root:
+Update package metadata and packages:
 
 ```sh
 pkg update
@@ -93,9 +48,7 @@ exit
 
 ---
 
-## 4. Clone the repository
-
-As your normal user:
+## 2. Clone the repository
 
 ```sh
 cd ~
@@ -103,172 +56,179 @@ git clone https://github.com/arimaforu/freebsd-dotfiles.git
 cd freebsd-dotfiles
 ```
 
-Check the repository:
-
-```sh
-ls
-```
-
-You should see files such as:
-
-```text
-.Xresources
-.xinitrc
-README.md
-bspwm/
-sxhkd/
-polybar/
-rofi/
-dunst/
-gtk-3.0/
-gtk-4.0/
-```
-
 ---
 
-# 5. Install the required software
+## 3. Install the desktop packages
 
-Become root again:
+Become root:
 
 ```sh
 su -
 ```
 
-Install the complete X11 desktop stack used by the configuration:
+Install the main X11 stack:
 
 ```sh
-pkg install -y xorg xinit setxkbmap xrdb xsetroot bspwm sxhkd polybar rofi dunst libnotify xterm thunar firefox picom feh scrot xdotool wmctrl xdg-utils font-awesome matcha-gtk-themes yaru-icon-theme dbus doas
+pkg install -y \
+    xorg \
+    xinit \
+    setxkbmap \
+    xrdb \
+    xsetroot \
+    bspwm \
+    sxhkd \
+    polybar \
+    rofi \
+    dunst \
+    libnotify \
+    xterm \
+    firefox \
+    picom \
+    feh \
+    scrot \
+    xdotool \
+    wmctrl \
+    xdg-utils \
+    font-awesome \
+    matcha-gtk-themes \
+    yaru-icon-theme \
+    dbus \
+    doas \
+    xclip \
+    jq \
+    basu \
+    locate
 ```
 
-These packages cover the commands and applications referenced directly by the dotfiles.
+Install Yazi:
 
-In particular:
+```sh
+pkg install -y yazi
+```
 
-- `setxkbmap` is used by `.xinitrc`
-- `xrdb` loads `.Xresources`
-- `xsetroot` is used by `bspwmrc`
-- `xdotool` is used by the Polybar window controls
-- `wmctrl` is used by the Rofi window switcher
-- `xdg-utils` provides `xdg-open`
-- `libnotify` provides `notify-send`
+### Yazi version note
+
+If the default FreeBSD repository provides an older Yazi than the configuration expects, enable the `latest` repository:
+
+```sh
+mkdir -p /usr/local/etc/pkg/repos
+
+cat > /usr/local/etc/pkg/repos/FreeBSD-latest.conf <<'EOF2'
+FreeBSD-latest: {
+    url: "pkg+https://pkg.FreeBSD.org/${ABI}/latest",
+    mirror_type: "srv",
+    signature_type: "fingerprints",
+    fingerprints: "/usr/share/keys/pkg",
+    enabled: yes
+}
+EOF2
+
+pkg update -r FreeBSD-latest
+pkg install -r FreeBSD-latest yazi
+```
+
+Return to the normal user:
+
+```sh
+exit
+```
 
 ---
 
-# 6. Add your user to `wheel` and `video`
-
-The graphical X11 session requires the user to be a member of the `video` group.
+## 4. Add the user to the required groups
 
 As root:
+
+```sh
+su -
+```
+
+Replace `YOUR_USERNAME` with the actual username:
 
 ```sh
 pw groupmod wheel -m YOUR_USERNAME
 pw groupmod video -m YOUR_USERNAME
 ```
 
-Verify later after logging in again with:
+Return to the user:
+
+```sh
+exit
+```
+
+Log out and back in after changing group membership.
+
+Verify:
 
 ```sh
 groups
 ```
 
-You should see at least:
-
-```text
-wheel video
-```
-
-Log out and log back in after changing the groups.
-
 ---
 
-# 7. Enable D-Bus
-
-D-Bus provides desktop integration used by various X11 and GTK applications.
+## 5. Enable D-Bus
 
 As root:
 
 ```sh
+su -
 sysrc dbus_enable="YES"
 service dbus start
+exit
 ```
 
 ---
 
-# 8. Configure `doas`
+## 6. Configure doas
 
-The power menu uses `doas` for shutdown and reboot.
+The power menu uses `doas`.
 
-Create the configuration:
+As root:
 
 ```sh
+su -
 echo 'permit persist :wheel' > /usr/local/etc/doas.conf
 chmod 600 /usr/local/etc/doas.conf
+exit
 ```
 
-After returning to your normal user, test it with:
+Test:
 
 ```sh
 doas id
 ```
 
-Enter your password when requested.
-
-The command should report that the command is running as root.
-
 ---
 
-# 9. VMware support
+## 7. VMware support
 
-The current `bspwm/bspwmrc` starts:
-
-```sh
-/usr/local/bin/vmtoolsd -n vmusr &
-```
-
-Because of this, the current configuration expects VMware Tools to be installed.
-
-For a VMware virtual machine, install:
+For a VMware virtual machine:
 
 ```sh
+su -
+
 pkg install -y \
     open-vm-tools \
     xf86-video-vmware \
     xf86-input-vmmouse
-```
 
-Then return to your normal user:
-
-```sh
 exit
 ```
 
-For a physical computer or another hypervisor, the `vmtoolsd` line in `~/.config/bspwm/bspwmrc` should be removed or changed to a conditional command.
-
-The rest of the dotfiles do not depend on VMware.
+The bspwm configuration starts `vmtoolsd` automatically when it is available.
 
 ---
 
-# 10. Install the dotfiles
+## 8. Install the dotfiles
 
-Return to your normal user:
-
-```sh
-exit
-```
-
-Go to the repository:
+From the repository:
 
 ```sh
 cd ~/freebsd-dotfiles
-```
-
-Create the configuration directory:
-
-```sh
 mkdir -p ~/.config
 ```
 
-Copy the desktop configurations:
+Copy configuration directories:
 
 ```sh
 cp -r bspwm ~/.config/
@@ -278,9 +238,10 @@ cp -r rofi ~/.config/
 cp -r dunst ~/.config/
 cp -r gtk-3.0 ~/.config/
 cp -r gtk-4.0 ~/.config/
+cp -r yazi ~/.config/
 ```
 
-Copy the X11 configuration:
+Copy X11 configuration:
 
 ```sh
 cp .xinitrc ~/
@@ -289,38 +250,69 @@ cp .Xresources ~/
 
 ---
 
-# 11. Create user directories
+## 9. XTerm and SIXEL
 
-The configuration expects a wallpaper and a screenshot directory.
+The repository uses XTerm in VT340 mode so Yazi can use native SIXEL previews.
 
-Create them:
+The normal terminal command is:
+
+```sh
+xterm -ti vt340
+```
+
+Yazi is launched with:
+
+```sh
+xterm -ti vt340 -e yazi
+```
+
+The `.Xresources` file contains the VT340/SIXEL settings.
+
+Apply it with:
+
+```sh
+xrdb -merge ~/.Xresources
+```
+
+Verify the terminal:
+
+```sh
+xterm -ti vt340
+```
+
+Then inside it:
+
+```sh
+ya env
+```
+
+The important lines should indicate:
+
+```text
+sixel: true
+Drivers.matches: Sixel
+```
+
+---
+
+## 10. Create user directories
 
 ```sh
 mkdir -p ~/Pictures/Wallpapers
 mkdir -p ~/Pictures/Screenshots
 ```
 
-The current `bspwmrc` expects the wallpaper at:
+The bspwm configuration expects the wallpaper at:
 
 ```text
 ~/Pictures/Wallpapers/y2k.jpg
 ```
 
-The wallpaper itself is **not included in this repository**.
-
-Put your own wallpaper there:
-
-```text
-~/Pictures/Wallpapers/y2k.jpg
-```
-
-If that file does not exist, `feh` will report an error when bspwm starts, but the rest of the desktop can still run.
+Place your own wallpaper there.
 
 ---
 
-# 12. Make scripts executable
-
-Run:
+## 11. Make scripts executable
 
 ```sh
 chmod +x ~/.xinitrc
@@ -333,15 +325,15 @@ find ~/.config/rofi/scripts -type f -exec chmod +x {} \;
 
 ---
 
-# 13. Start the graphical desktop
+## 12. Start X11
 
-From the TTY, run:
+From the TTY:
 
 ```sh
 startx
 ```
 
-The session should start with:
+The session starts:
 
 - bspwm
 - sxhkd
@@ -350,24 +342,16 @@ The session should start with:
 - Dunst
 - Picom
 - feh wallpaper
-- GTK settings
-- XTerm configuration
-
-If everything is installed correctly, you should be dropped directly into the bspwm desktop.
+- X11 resource configuration
+- background helper scripts
 
 ---
 
-# 14. Optional: update the `locate` database
+## 13. Locate database
 
-The Rofi file-search script uses `locate`.
+The Rofi file-search script can use `locate`.
 
-On a fresh FreeBSD installation, the `locate` database may not have been generated yet. FreeBSD provides the update utility at:
-
-```text
-/usr/libexec/locate.updatedb
-```
-
-Run it as root:
+Initialize it as root:
 
 ```sh
 su -
@@ -375,46 +359,152 @@ su -
 exit
 ```
 
-You can then test it with:
+Test:
 
 ```sh
 locate xterm
 ```
 
-The file search shortcut is:
+The shortcut is:
 
 ```text
 Ctrl + Alt + F
 ```
 
-FreeBSD normally rebuilds the `locate` database periodically, so this step is optional rather than required for the initial desktop installation.
+---
+
+## 14. Verify terminal and Yazi
+
+Open XTerm:
+
+```sh
+xterm -ti vt340
+```
+
+Check:
+
+```sh
+echo "$TERM"
+```
+
+Expected:
+
+```text
+xterm
+```
+
+Start Yazi:
+
+```sh
+xterm -ti vt340 -e yazi
+```
+
+Then select an image. The preview pane should show the actual image through SIXEL.
 
 ---
 
-# 15. Check `.xinitrc` after the first `startx`
+## 15. Updating the dotfiles
 
-The repository provides:
+After pulling repository changes:
 
 ```sh
+cd ~/freebsd-dotfiles
+git pull --rebase
+```
+
+Copy changed configurations back into the system as needed.
+
+Examples:
+
+```sh
+cp sxhkd/sxhkdrc ~/.config/sxhkd/sxhkdrc
+cp .Xresources ~/.Xresources
 xrdb -merge ~/.Xresources
-
-setxkbmap -layout us,ru -option grp:alt_shift_toggle
-
-exec bspwm
 ```
 
-This does three things:
-
-1. Loads the XTerm/X11 settings
-2. Enables US/Russian keyboard layouts
-3. Starts bspwm
-
-Normally you do not need to edit this file.
-
-If `startx` fails, inspect it from the TTY:
+Restart sxhkd:
 
 ```sh
-cat ~/.xinitrc
+pkill sxhkd
+sxhkd &
+```
+
+For a complete desktop restart, use:
+
+```text
+Super + Shift + R
 ```
 
 ---
+
+## Troubleshooting
+
+### Yazi does not detect SIXEL
+
+Start XTerm explicitly in VT340 mode:
+
+```sh
+xterm -ti vt340
+```
+
+Then:
+
+```sh
+ya env
+```
+
+Look for:
+
+```text
+sixel: true
+Drivers.matches: Sixel
+```
+
+### Yazi shows broken image escape sequences
+
+Make sure Yazi is running inside XTerm VT340:
+
+```sh
+xterm -ti vt340 -e yazi
+```
+
+Do not run it through a terminal that advertises another graphics protocol unless that terminal is intentionally being used.
+
+### Transparent XTerm background does not work
+
+Make sure Picom is running:
+
+```sh
+pgrep picom
+```
+
+Then restart the bspwm session:
+
+```text
+Super + Shift + R
+```
+
+### Start the desktop manually
+
+```sh
+startx
+```
+
+---
+
+## Notes
+
+This repository is a personal FreeBSD X11 configuration built around:
+
+```text
+FreeBSD
+bspwm
+sxhkd
+Polybar
+Rofi
+Dunst
+XTerm
+Yazi
+```
+
+No full desktop environment is required.
