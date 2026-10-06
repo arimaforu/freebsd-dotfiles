@@ -2,11 +2,12 @@
 overall = { bg = "#0B0C0F" }
 
 [mgr]
-cwd = { fg = "#00E6D0" }
-hovered = { fg = "#E6E6E6", bg = "#202020" }
+cwd = { fg = "#00E6D0", bold = true }
+
+hovered = { fg = "#FFFFFF", bg = "#202020", bold = true }
 
 find_keyword = { fg = "#0B0C0F", bg = "#00E6D0", bold = true }
-find_position = { fg = "#00E6D0" }
+find_position = { fg = "#00E6D0", bold = true }
 
 marker_copied = { fg = "#0B0C0F", bg = "#00E6D0" }
 marker_cut = { fg = "#FFFFFF", bg = "#E06C75" }
@@ -21,22 +22,22 @@ border_symbol = "│"
 border_style = { fg = "#202020" }
 
 [indicator]
-parent = { fg = "#202020" }
+parent = { fg = "#707780" }
 current = { fg = "#00E6D0" }
 preview = { fg = "#00E6D0" }
 
 [tabs]
 active = { fg = "#0B0C0F", bg = "#00E6D0", bold = true }
-inactive = { fg = "#707780", bg = "#202020" }
+inactive = { fg = "#E6E6E6", bg = "#202020" }
 
 [mode]
 normal_main = { fg = "#0B0C0F", bg = "#00E6D0", bold = true }
-normal_alt = { fg = "#00E6D0", bg = "#202020" }
+normal_alt = { fg = "#E6E6E6", bg = "#202020" }
 
 select_main = { fg = "#0B0C0F", bg = "#E6E6E6", bold = true }
 select_alt = { fg = "#E6E6E6", bg = "#202020" }
 
-unset_main = { fg = "#0B0C0F", bg = "#E06C75", bold = true }
+unset_main = { fg = "#FFFFFF", bg = "#E06C75", bold = true }
 unset_alt = { fg = "#E06C75", bg = "#202020" }
 
 [status]
@@ -48,13 +49,13 @@ perm_write = { fg = "#E6E6E6" }
 perm_exec = { fg = "#00E6D0" }
 perm_sep = { fg = "#202020" }
 
-progress_label = { fg = "#E6E6E6" }
+progress_label = { fg = "#E6E6E6", bold = true }
 progress_normal = { fg = "#00E6D0", bg = "#202020" }
 progress_error = { fg = "#E06C75", bg = "#202020" }
 
 [filetype]
 rules = [
-    { url = "*/", fg = "#00E6D0", bold = true },
+    { url = "*/", fg = "#E6E6E6", bold = true },
     { url = "*", is = "exec", fg = "#00E6D0", bold = true },
     { url = "*", is = "link", fg = "#5C8DFF" },
     { url = "*", is = "orphan", fg = "#E06C75" },
