@@ -6,6 +6,10 @@ XTerm*faceName: DejaVu Sans Mono
 XTerm*faceSize: 11
 XTerm*renderFont: true
 
+Xcursor.theme: Adwaita
+Xcursor.size: 24
+Xcursor.theme_core: true
+
 XTerm*scrollBar: false
 XTerm*saveLines: 5000
 
@@ -14,7 +18,6 @@ XTerm*highlightTextColor: #080808
 XTerm*highlightColor: #00ffcc
 
 XTerm*cursorShape: block
-XTerm*pointerShape: left_ptr
 
 XTerm*bellIsUrgent: false
 XTerm*visualBell: false
