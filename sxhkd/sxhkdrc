@@ -1,6 +1,6 @@
 # Terminal
 super + t
-    kitty
+    xfce4-terminal
 
 # Частота монитора
 ctrl + alt + h
@@ -40,7 +40,7 @@ alt + Print
     ~/.config/bspwm/scripts/screenshot.sh window
 
 super + e
-    kitty -e yazi
+    xfce4-terminal -e yazi
 
 # Rofi
 ctrl + alt + d

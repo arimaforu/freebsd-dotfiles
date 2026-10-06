@@ -20,8 +20,8 @@ The goal of this repository is to make it possible to reproduce the desktop on a
 | Status Bar | Polybar |
 | Application Launcher | Rofi |
 | Notifications | Dunst |
-| Terminal | xterm |
-| File Manager | Thunar |
+| Terminal | xfce4-terminal |
+| File Manager | Yazi |
 | Browser | Firefox |
 | Compositor | Picom |
 | Wallpaper | feh |
@@ -45,8 +45,8 @@ The goal of this repository is to make it possible to reproduce the desktop on a
 - Date and time
 - Dunst notifications
 - Screenshot shortcuts
-- Thunar file manager
-- Custom XTerm appearance
+- Yazi file manager
+- Custom xfce4-terminal appearance
 - Power menu
 - VMware guest integration
 - Configuration stored in one Git repository
