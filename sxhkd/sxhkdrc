@@ -2,6 +2,20 @@
 super + Return
     xterm
 
+# Частота монитора
+ctrl + alt + h
+    ~/.config/bspwm/scripts/refresh-rate.sh
+
+# Mouse sensitivity
+super + ctrl + Up
+    ~/.config/bspwm/scripts/mouse-sensitivity.sh up
+
+super + ctrl + Down
+    ~/.config/bspwm/scripts/mouse-sensitivity.sh down
+
+super + ctrl + 0
+    ~/.config/bspwm/scripts/mouse-sensitivity.sh reset
+
 # Display resolution
 ctrl + alt + r
     ~/.config/rofi/scripts/resolution.sh
@@ -57,14 +71,18 @@ super + l
     bspc node -f east
 
 # Move window
-super + shift + h
+# Move window with arrows
+super + shift + Left
     bspc node -s west
-super + shift + j
-    bspc node -s south
-super + shift + k
-    bspc node -s north
-super + shift + l
+
+super + shift + Right
     bspc node -s east
+
+super + shift + Up
+    bspc node -s north
+
+super + shift + Down
+    bspc node -s south
 
 # Workspaces
 super + 1
