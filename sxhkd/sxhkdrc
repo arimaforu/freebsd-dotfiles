@@ -6,16 +6,6 @@ super + t
 ctrl + alt + h
     ~/.config/bspwm/scripts/refresh-rate.sh
 
-# Mouse sensitivity
-super + ctrl + Up
-    ~/.config/bspwm/scripts/mouse-sensitivity.sh up
-
-super + ctrl + Down
-    ~/.config/bspwm/scripts/mouse-sensitivity.sh down
-
-super + ctrl + 0
-    ~/.config/bspwm/scripts/mouse-sensitivity.sh reset
-
 # Display resolution
 ctrl + alt + r
     ~/.config/rofi/scripts/resolution.sh
