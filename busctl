@@ -1,0 +1,17 @@
+#!/bin/sh
+
+args=""
+
+for arg in "$@"; do
+    [ "$arg" = "--no-pager" ] && continue
+
+    if [ -z "$args" ]; then
+        args="$arg"
+    else
+        args="$args $arg"
+    fi
+done
+
+# basuctl is compatible with the busctl calls used by dunstctl,
+# except for the unsupported --no-pager option.
+exec /usr/local/bin/basuctl $args
