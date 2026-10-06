@@ -1,5 +1,5 @@
 # Terminal
-super + Return
+super + t
     xterm
 
 # Частота монитора
@@ -33,7 +33,7 @@ super + shift + r
     ~/.config/bspwm/scripts/restart-desktop.sh
 
 # Power menu
-super + shift + p
+super + shift + q
     ~/.config/rofi/scripts/power-menu.sh
 
 # Clipboard history
@@ -57,7 +57,7 @@ ctrl + alt + d
     rofi -show drun -theme ~/.config/rofi/theme.rasi
 
 # Close window
-super + shift + q
+super + q
     bspc node -c
 
 # Focus
@@ -135,6 +135,9 @@ ctrl + alt + f
 # Window switcher
 ctrl + alt + w
     ~/.config/rofi/scripts/window-switcher.sh
+
+super + b
+    firefox
 
 # Workspace switcher
 ctrl + alt + s
