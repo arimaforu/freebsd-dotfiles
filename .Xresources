@@ -44,3 +44,13 @@ XTerm*color15: #FFFFFF
 
 XTerm*title: FREEBSD // TERMINAL
 XTerm*iconName: FREEBSD
+
+! SIXEL / VT340
+XTerm*decTerminalID: vt340
+XTerm*numColorRegisters: 256
+XTerm*sixelScrolling: true
+
+! SIXEL / VT340
+XTerm*decTerminalID: vt340
+XTerm*decGraphicsID: 340
+XTerm*numColorRegisters: 256

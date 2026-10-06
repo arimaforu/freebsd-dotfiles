@@ -2,6 +2,7 @@
 super + t
     xterm -ti vt340
 
+
 super + e
     xterm -ti vt340 -e yazi
 
