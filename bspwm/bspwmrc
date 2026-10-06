@@ -40,3 +40,6 @@ fi
 
 pkill polybar 2>/dev/null
 polybar y2k &
+
+pkill -f "$HOME/.config/bspwm/scripts/desktop-watchdog.sh" 2>/dev/null
+"$HOME/.config/bspwm/scripts/desktop-watchdog.sh" &

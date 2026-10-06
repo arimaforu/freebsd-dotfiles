@@ -2,6 +2,10 @@
 super + Return
     xterm
 
+# Restart desktop
+super + shift + r
+    ~/.config/bspwm/scripts/restart-desktop.sh
+
 # Power menu
 super + shift + p
     ~/.config/rofi/scripts/power-menu.sh
