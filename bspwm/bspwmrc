@@ -38,6 +38,9 @@ if command -v xclip >/dev/null 2>&1; then
     "$HOME/.config/bspwm/scripts/clipboard-daemon.sh" &
 fi
 
+pkill -f '[a]udio-watch.sh' 2>/dev/null
+"$HOME/.config/bspwm/scripts/audio-watch.sh" &
+
 pkill polybar 2>/dev/null
 polybar y2k &
 
