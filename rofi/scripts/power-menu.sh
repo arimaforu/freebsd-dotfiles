@@ -1,7 +1,11 @@
 #!/bin/sh
 
-choice=$(printf "  Lock\n󰐥  Shutdown\n󰜉  Reboot\n󰍃  Logout" | rofi -dmenu -i -p "Power" \
-    -theme ~/.config/rofi/theme.rasi)
+choice=$(printf '%s\n' \
+    "⏻  Shutdown" \
+    "↻  Reboot" \
+    "⇥  Logout" |
+    rofi -dmenu -i -p "Power" \
+        -theme "$HOME/.config/rofi/theme.rasi")
 
 case "$choice" in
     *Shutdown)
