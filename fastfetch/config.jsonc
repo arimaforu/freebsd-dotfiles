@@ -1,106 +1,84 @@
 {
-  "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/master/doc/json_schema.json",
+    "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/master/doc/json_schema.json",
 
-  // NEEDY GIRL OVERDOSE: KAngel's winged heart, halo and a pill (truecolor
-  // half-blocks, so the size is given: raw ANSI can't be measured)
-  "logo": {
-    "type": "file-raw",
-    "source": "~/.config/fastfetch/logo.txt",
-    "width": 40,
-    "height": 16,
-    "padding": {
-      "top": 1,
-      "right": 3
-    }
-  },
-
-  "display": {
-    "separator": " ♡ ",
-    "color": {
-      "keys": "38;2;255;111;176",
-      "title": "38;2;201;182;255"
-    }
-  },
-
-  "modules": [
-    "title",
-    "separator",
-
-    {
-      "type": "os",
-      "key": "OS"
-    },
-    {
-      "type": "disk",
-      "key": "OS Age",
-      "folders": "/",
-      "format": "{days} days"
-    },
-    {
-      "type": "host",
-      "key": "Host"
-    },
-    {
-      "type": "kernel",
-      "key": "Kernel"
-    },
-    {
-      "type": "uptime",
-      "key": "Uptime"
+    "logo": {
+        "type": "auto",
+        "padding": {
+            "top": 1,
+            "right": 4
+        },
+        "color": {
+            "1": "#00E6D0",
+            "2": "#707780"
+        }
     },
 
-    "break",
-
-    {
-      "type": "cpu",
-      "key": "CPU"
-    },
-    {
-      "type": "gpu",
-      "key": "GPU",
-      "format": "{name}"
-    },
-    {
-      "type": "memory",
-      "key": "RAM",
-      "format": "{used} / {total}"
-    },
-    {
-      "type": "disk",
-      "key": "Disk",
-      "format": "{size-used} / {size-total}"
+    "display": {
+        "separator": "  ",
+        "color": {
+            "keys": "#00E6D0",
+            "title": "#E6E6E6"
+        },
+        "brightColor": false
     },
 
-    "break",
+    "modules": [
+        "title",
+        "separator",
 
-    {
-      "type": "command",
-      "key": "Keyboard",
-      "text": "python3 ~/.config/quickshell/angelos/scripts/gear.py --kind keyboard"
-    },
-    {
-      "type": "command",
-      "key": "Mouse",
-      "text": "python3 ~/.config/quickshell/angelos/scripts/gear.py --kind mouse"
-    },
-    {
-      "type": "command",
-      "key": "Mic",
-      "text": "python3 ~/.config/quickshell/angelos/scripts/gear.py --kind mic"
-    },
+        {
+            "type": "host",
+            "key": "Host"
+        },
+        {
+            "type": "kernel",
+            "key": "Kernel"
+        },
+        {
+            "type": "uptime",
+            "key": "Uptime"
+        },
+        {
+            "type": "shell",
+            "key": "Shell"
+        },
+        {
+            "type": "wm",
+            "key": "WM"
+        },
 
-    "break",
+        "break",
 
-    {
-      "type": "terminal",
-      "key": "Terminal"
-    },
-    {
-      "type": "localip",
-      "key": "IP"
-    },
+        {
+            "type": "cpu",
+            "key": "CPU"
+        },
+        {
+            "type": "gpu",
+            "key": "GPU",
+            "format": "{name}"
+        },
+        {
+            "type": "memory",
+            "key": "RAM"
+        },
+        {
+            "type": "disk",
+            "key": "Disk"
+        },
 
-    "break",
-    "colors"
-  ]
+        "break",
+
+        {
+            "type": "terminal",
+            "key": "Terminal"
+        },
+        {
+            "type": "localip",
+            "key": "IP"
+        },
+
+        "break",
+        "colors"
+    ]
 }
