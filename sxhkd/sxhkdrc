@@ -1,6 +1,6 @@
 # Terminal
 super + t
-    xfce4-terminal
+    xfce4-terminal --disable-server
 
 # Частота монитора
 ctrl + alt + h
@@ -40,7 +40,7 @@ alt + Print
     ~/.config/bspwm/scripts/screenshot.sh window
 
 super + e
-    xfce4-terminal -e yazi
+    xfce4-terminal --disable-server -e yazi
 
 # Rofi
 ctrl + alt + d
