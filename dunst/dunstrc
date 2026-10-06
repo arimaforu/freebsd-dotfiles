@@ -3,6 +3,9 @@
 monitor = 0
 follow = none
 
+history_length = 50
+sticky_history = true
+
 width = 360
 height = (0, 90)
 

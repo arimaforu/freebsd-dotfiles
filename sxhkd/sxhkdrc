@@ -2,6 +2,14 @@
 super + Return
     xterm
 
+# Notification history
+ctrl + alt + n
+    ~/.config/rofi/scripts/notification-history.sh
+
+# Audio output
+ctrl + alt + a
+    ~/.config/rofi/scripts/audio-output.sh
+
 # Restart desktop
 super + shift + r
     ~/.config/bspwm/scripts/restart-desktop.sh
