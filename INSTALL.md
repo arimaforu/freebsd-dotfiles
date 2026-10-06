@@ -1,33 +1,36 @@
 # FreeBSD Dotfiles — Installation
 
-Installation guide for setting up these dotfiles on a fresh FreeBSD 15.x amd64 system.
+Installation guide for deploying this configuration on a fresh **FreeBSD 15.x amd64** installation.
 
-> Tested on **FreeBSD 15.1 amd64**, primarily inside VMware.
+> Tested on **FreeBSD 15.1 amd64**, primarily in VMware.
+
+The configuration uses X11 and `startx`. No KDE, GNOME, XFCE or other full desktop environment is required.
 
 ---
 
-## Requirements
+# 1. Requirements
 
-The instructions assume:
+You need:
 
 - FreeBSD 15.x amd64
-- A normal user account
-- Working Internet access
-- Access to a TTY/console
-- `startx` will be used to start the X11 session
-- No full desktop environment is required
+- a normal user account
+- working Internet access
+- a TTY/console
+- `root` access through `su`
+
+This is a FreeBSD-specific X11 configuration, not a generic Linux dotfiles setup.
 
 ---
 
-## 1. Update the system and install Git
+# 2. Update the system and install Git
 
-Become root:
+Switch to root:
 
 ```sh
 su -
 ```
 
-Update package metadata and packages:
+Update packages:
 
 ```sh
 pkg update
@@ -40,7 +43,7 @@ Install Git:
 pkg install -y git
 ```
 
-Return to your normal user:
+Return to the normal user:
 
 ```sh
 exit
@@ -48,7 +51,7 @@ exit
 
 ---
 
-## 2. Clone the repository
+# 3. Clone the repository
 
 ```sh
 cd ~
@@ -56,9 +59,15 @@ git clone https://github.com/arimaforu/freebsd-dotfiles.git
 cd freebsd-dotfiles
 ```
 
+Repository path:
+
+```text
+~/freebsd-dotfiles
+```
+
 ---
 
-## 3. Install the desktop packages
+# 4. Install the desktop packages
 
 Become root:
 
@@ -66,49 +75,21 @@ Become root:
 su -
 ```
 
-Install the main X11 stack:
+Install the main stack:
 
 ```sh
-pkg install -y \
-    xorg \
-    xinit \
-    setxkbmap \
-    xrdb \
-    xsetroot \
-    bspwm \
-    sxhkd \
-    polybar \
-    rofi \
-    dunst \
-    libnotify \
-    xterm \
-    firefox \
-    picom \
-    feh \
-    scrot \
-    xdotool \
-    wmctrl \
-    xdg-utils \
-    font-awesome \
-    matcha-gtk-themes \
-    yaru-icon-theme \
-    dbus \
-    doas \
-    xclip \
-    jq \
-    basu \
-    locate
+pkg install -y     xorg     xinit     setxkbmap     xrdb     xsetroot     bspwm     sxhkd     polybar     rofi     dunst     libnotify     xterm     firefox     picom     feh     scrot     xdotool     wmctrl     xdg-utils     xclip     jq     font-awesome     matcha-gtk-themes     yaru-icon-theme     dbus     doas     locate     thunar     yazi
 ```
 
-Install Yazi:
+`thunar` is used by the file-search helper for directories. Yazi is the primary file manager used by the desktop shortcut.
 
-```sh
-pkg install -y yazi
-```
+---
 
-### Yazi version note
+# 5. Optional Yazi latest repository
 
-If the default FreeBSD repository provides an older Yazi than the configuration expects, enable the `latest` repository:
+Normally the standard FreeBSD repository is enough.
+
+If you specifically need a newer Yazi build from `latest`:
 
 ```sh
 mkdir -p /usr/local/etc/pkg/repos
@@ -127,67 +108,59 @@ pkg update -r FreeBSD-latest
 pkg install -r FreeBSD-latest yazi
 ```
 
-Return to the normal user:
-
-```sh
-exit
-```
+Use this only when the normal repository version is not suitable.
 
 ---
 
-## 4. Add the user to the required groups
+# 6. Add the user to required groups
 
-As root:
-
-```sh
-su -
-```
-
-Replace `YOUR_USERNAME` with the actual username:
+Replace `YOUR_USERNAME` with your actual username.
 
 ```sh
 pw groupmod wheel -m YOUR_USERNAME
 pw groupmod video -m YOUR_USERNAME
 ```
 
-Return to the user:
+Check:
 
 ```sh
-exit
+groups YOUR_USERNAME
 ```
 
 Log out and back in after changing group membership.
 
-Verify:
-
-```sh
-groups
-```
-
 ---
 
-## 5. Enable D-Bus
+# 7. Enable D-Bus
 
 As root:
 
 ```sh
-su -
 sysrc dbus_enable="YES"
 service dbus start
+```
+
+Return to the normal user:
+
+```sh
 exit
 ```
 
+The X session is started through `dbus-run-session` in `.xinitrc`.
+
 ---
 
-## 6. Configure doas
+# 8. Configure doas
 
-The power menu uses `doas`.
+The power menu uses `doas` for shutdown and reboot.
 
 As root:
 
 ```sh
 su -
-echo 'permit persist :wheel' > /usr/local/etc/doas.conf
+cat > /usr/local/etc/doas.conf <<'EOF2'
+permit persist :wheel
+EOF2
 chmod 600 /usr/local/etc/doas.conf
 exit
 ```
@@ -200,35 +173,37 @@ doas id
 
 ---
 
-## 7. VMware support
+# 9. VMware support — optional
 
-For a VMware virtual machine:
+Only needed inside VMware.
 
 ```sh
 su -
 
-pkg install -y \
-    open-vm-tools \
-    xf86-video-vmware \
-    xf86-input-vmmouse
+pkg install -y     open-vm-tools     xf86-video-vmware     xf86-input-vmmouse
 
 exit
 ```
 
-The bspwm configuration starts `vmtoolsd` automatically when it is available.
+When available, `bspwmrc` starts `vmtoolsd -n vmusr` automatically.
 
 ---
 
-## 8. Install the dotfiles
+# 10. Install the dotfiles
+
+Create the configuration directory:
+
+```sh
+mkdir -p ~/.config
+```
 
 From the repository:
 
 ```sh
 cd ~/freebsd-dotfiles
-mkdir -p ~/.config
 ```
 
-Copy configuration directories:
+Copy the configuration directories:
 
 ```sh
 cp -r bspwm ~/.config/
@@ -239,80 +214,36 @@ cp -r dunst ~/.config/
 cp -r gtk-3.0 ~/.config/
 cp -r gtk-4.0 ~/.config/
 cp -r yazi ~/.config/
+cp -r fastfetch ~/.config/
 ```
 
 Copy X11 configuration:
 
 ```sh
-cp .xinitrc ~/
-cp .Xresources ~/
+cp .xinitrc ~/.xinitrc
+cp .Xresources ~/.Xresources
 ```
 
 ---
 
-## 9. XTerm and SIXEL
-
-The repository uses XTerm in VT340 mode so Yazi can use native SIXEL previews.
-
-The normal terminal command is:
-
-```sh
-xterm -ti vt340
-```
-
-Yazi is launched with:
-
-```sh
-xterm -ti vt340 -e yazi
-```
-
-The `.Xresources` file contains the VT340/SIXEL settings.
-
-Apply it with:
-
-```sh
-xrdb -merge ~/.Xresources
-```
-
-Verify the terminal:
-
-```sh
-xterm -ti vt340
-```
-
-Then inside it:
-
-```sh
-ya env
-```
-
-The important lines should indicate:
-
-```text
-sixel: true
-Drivers.matches: Sixel
-```
-
----
-
-## 10. Create user directories
+# 11. Wallpaper and screenshot directories
 
 ```sh
 mkdir -p ~/Pictures/Wallpapers
 mkdir -p ~/Pictures/Screenshots
 ```
 
-The bspwm configuration expects the wallpaper at:
+The bspwm configuration expects:
 
 ```text
 ~/Pictures/Wallpapers/y2k.jpg
 ```
 
-Place your own wallpaper there.
+Put your own wallpaper there. The wallpaper is intentionally not included in the repository.
 
 ---
 
-## 11. Make scripts executable
+# 12. Make scripts executable
 
 ```sh
 chmod +x ~/.xinitrc
@@ -321,37 +252,108 @@ chmod +x ~/.config/bspwm/bspwmrc
 find ~/.config/bspwm/scripts -type f -exec chmod +x {} \;
 find ~/.config/polybar/scripts -type f -exec chmod +x {} \;
 find ~/.config/rofi/scripts -type f -exec chmod +x {} \;
+
+chmod +x ~/freebsd-dotfiles/scripts/hotplug-notify.sh
 ```
 
 ---
 
-## 12. Start X11
-
-From the TTY:
+# 13. Run the dependency checker
 
 ```sh
-startx
+cd ~/freebsd-dotfiles
+sh check-dependencies.sh
 ```
 
-The session starts:
-
-- bspwm
-- sxhkd
-- Polybar
-- Rofi
-- Dunst
-- Picom
-- feh wallpaper
-- X11 resource configuration
-- background helper scripts
+The checker only reports missing dependencies. It does not install or modify anything.
 
 ---
 
-## 13. Locate database
+# 14. Fastfetch — optional
 
-The Rofi file-search script can use `locate`.
+Create the directory:
 
-Initialize it as root:
+```sh
+mkdir -p ~/.config/fastfetch
+```
+
+Copy the configuration:
+
+```sh
+cp ~/freebsd-dotfiles/fastfetch/config.jsonc ~/.config/fastfetch/config.jsonc
+```
+
+Test:
+
+```sh
+fastfetch
+```
+
+---
+
+# 15. Shell prompt — optional
+
+The repository contains:
+
+```text
+shell/prompt.sh
+```
+
+For a POSIX-compatible shell, source it from your shell configuration:
+
+```sh
+. ~/freebsd-dotfiles/shell/prompt.sh
+```
+
+This does not affect the X11 desktop.
+
+---
+
+# 16. XTerm and SIXEL
+
+Apply X resources:
+
+```sh
+xrdb -merge ~/.Xresources
+```
+
+Test XTerm:
+
+```sh
+xterm -ti vt340
+```
+
+Yazi is launched as:
+
+```sh
+xterm -ti vt340 -e yazi
+```
+
+`.Xresources` contains the terminal palette, font, clipboard bindings and VT340/SIXEL-related options.
+
+---
+
+# 17. Test Yazi
+
+```sh
+xterm -ti vt340 -e yazi
+```
+
+Open a directory containing an image and check the preview pane.
+
+You can also inspect the environment with:
+
+```sh
+ya env
+```
+
+---
+
+# 18. Configure file search
+
+The Rofi file-search helper uses the FreeBSD `locate` database.
+
+As root:
 
 ```sh
 su -
@@ -365,71 +367,150 @@ Test:
 locate xterm
 ```
 
-The shortcut is:
+Shortcut:
 
 ```text
 Ctrl + Alt + F
 ```
 
+Directories are opened with Thunar; files are opened through `xdg-open`.
+
 ---
 
-## 14. Verify terminal and Yazi
+# 19. USB hotplug notifications — optional
 
-Open XTerm:
-
-```sh
-xterm -ti vt340
-```
-
-Check:
-
-```sh
-echo "$TERM"
-```
-
-Expected:
+The repository contains:
 
 ```text
-xterm
+devd/hotplug.conf
+scripts/hotplug-notify.sh
 ```
 
-Start Yazi:
+The helper currently contains:
 
 ```sh
-xterm -ti vt340 -e yazi
+USER_NAME="user"
 ```
 
-Then select an image. The preview pane should show the actual image through SIXEL.
+Change this to the actual desktop username before enabling the feature.
+
+Then:
+
+```sh
+chmod +x ~/freebsd-dotfiles/scripts/hotplug-notify.sh
+```
+
+Create the command expected by `devd`:
+
+```sh
+su -
+ln -sf /home/YOUR_USERNAME/freebsd-dotfiles/scripts/hotplug-notify.sh /usr/local/bin/dotfiles-hotplug
+exit
+```
+
+Replace `YOUR_USERNAME` with your real username.
+
+Install the rule:
+
+```sh
+su -
+cp ~/freebsd-dotfiles/devd/hotplug.conf /usr/local/etc/devd/dotfiles-hotplug.conf
+service devd restart
+exit
+```
+
+This feature is optional and is not required for the rest of the desktop.
 
 ---
 
-## 15. Updating the dotfiles
+# 20. Start X11
 
-After pulling repository changes:
+From a TTY, log in as the normal user and run:
+
+```sh
+startx
+```
+
+`.xinitrc`:
+
+1. loads `.Xresources`;
+2. configures US/Russian layouts;
+3. sets the X11 cursor;
+4. starts `bspwm` inside `dbus-run-session`.
+
+`bspwmrc` then starts:
+
+```text
+sxhkd
+Polybar
+Dunst
+Picom
+feh
+clipboard daemon
+audio watcher
+desktop watchdog
+VMware tools (when available)
+```
+
+---
+
+# 21. First checks
+
+Test the main shortcuts:
+
+```text
+Super + T
+Super + B
+Super + E
+Ctrl + Alt + D
+Super + 1..9
+Super + V
+Ctrl + Alt + A
+Ctrl + Alt + R
+Ctrl + Alt + H
+```
+
+---
+
+# 22. Restarting the desktop
+
+```text
+Super + Shift + R
+```
+
+This runs:
+
+```sh
+bspc wm -r
+```
+
+---
+
+# 23. Updating the dotfiles
+
+Update the repository:
 
 ```sh
 cd ~/freebsd-dotfiles
 git pull --rebase
 ```
 
-Copy changed configurations back into the system as needed.
-
-Examples:
+Copy changed files back into place as needed:
 
 ```sh
 cp sxhkd/sxhkdrc ~/.config/sxhkd/sxhkdrc
+cp polybar/config.ini ~/.config/polybar/config.ini
+cp rofi/theme.rasi ~/.config/rofi/theme.rasi
 cp .Xresources ~/.Xresources
+```
+
+Reload X resources:
+
+```sh
 xrdb -merge ~/.Xresources
 ```
 
-Restart sxhkd:
-
-```sh
-pkill sxhkd
-sxhkd &
-```
-
-For a complete desktop restart, use:
+Then restart bspwm:
 
 ```text
 Super + Shift + R
@@ -437,74 +518,190 @@ Super + Shift + R
 
 ---
 
-## Troubleshooting
+# 24. Troubleshooting
 
-### Yazi does not detect SIXEL
+## `startx` exits immediately
 
-Start XTerm explicitly in VT340 mode:
-
-```sh
-xterm -ti vt340
-```
-
-Then:
+Check:
 
 ```sh
-ya env
+cat ~/.xinitrc
+startx
 ```
 
-Look for:
+For Xorg problems inspect the Xorg log under:
 
 ```text
-sixel: true
-Drivers.matches: Sixel
+~/.local/share/xorg/
 ```
 
-### Yazi shows broken image escape sequences
-
-Make sure Yazi is running inside XTerm VT340:
+## No Polybar
 
 ```sh
-xterm -ti vt340 -e yazi
+pgrep polybar
+polybar y2k
 ```
 
-Do not run it through a terminal that advertises another graphics protocol unless that terminal is intentionally being used.
+## No keyboard shortcuts
 
-### Transparent XTerm background does not work
+```sh
+pgrep sxhkd
+sxhkd
+```
 
-Make sure Picom is running:
+## No notifications
+
+```sh
+pgrep dunst
+notify-send "TEST" "Dunst is working"
+```
+
+## No Picom shadows/transparency
 
 ```sh
 pgrep picom
 ```
 
-Then restart the bspwm session:
+Then restart the desktop with `Super + Shift + R`.
 
-```text
-Super + Shift + R
-```
+## Yazi image previews do not work
 
-### Start the desktop manually
+Run:
 
 ```sh
-startx
+xterm -ti vt340
+yazi
+```
+
+Verify that the installed XTerm/Yazi combination supports the expected graphics protocol.
+
+## Audio output switching does not work
+
+Check:
+
+```sh
+cat /dev/sndstat
+sysctl hw.snd.default_unit
+mixer
+```
+
+The selector relies on FreeBSD `pcm` devices.
+
+## Headphone auto-volume does not work
+
+The watcher reads FreeBSD HDA information from:
+
+```sh
+dmesg -a
+```
+
+and may need hardware-specific adjustment.
+
+Script:
+
+```text
+~/.config/bspwm/scripts/audio-watch.sh
+```
+
+## File search does nothing
+
+Update `locate`:
+
+```sh
+su -
+/usr/libexec/locate.updatedb
+exit
+```
+
+Then:
+
+```sh
+locate xterm
 ```
 
 ---
 
-## Notes
+# 25. Core installation vs optional features
 
-This repository is a personal FreeBSD X11 configuration built around:
+Core desktop:
 
 ```text
-FreeBSD
+Xorg
 bspwm
 sxhkd
 Polybar
 Rofi
 Dunst
 XTerm
-Yazi
+Picom
+feh
+scrot
+xclip
+```
+
+Optional features include:
+
+- VMware integration;
+- USB hotplug notifications;
+- Fastfetch customization;
+- shell prompt customization.
+
+---
+
+# 26. Final locations
+
+Important user files:
+
+```text
+~/.xinitrc
+~/.Xresources
+
+~/.config/bspwm/
+~/.config/sxhkd/
+~/.config/polybar/
+~/.config/rofi/
+~/.config/dunst/
+~/.config/gtk-3.0/
+~/.config/gtk-4.0/
+~/.config/yazi/
+~/.config/fastfetch/
+```
+
+Generated user data:
+
+```text
+~/Pictures/Screenshots/
+~/Pictures/Wallpapers/
+~/.cache/freebsd-dotfiles/
+```
+
+---
+
+# 27. Done
+
+Start the desktop with:
+
+```sh
+startx
+```
+
+The intended session is:
+
+```text
+FreeBSD
+   │
+  Xorg
+   │
+ bspwm
+   ├── sxhkd
+   ├── Polybar
+   ├── Rofi
+   ├── Dunst
+   ├── Picom
+   ├── feh
+   ├── clipboard daemon
+   ├── audio watcher
+   └── desktop watchdog
 ```
 
 No full desktop environment is required.
