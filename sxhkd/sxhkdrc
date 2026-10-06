@@ -1,6 +1,6 @@
 # Terminal
 super + t
-    xterm
+    kitty
 
 # Частота монитора
 ctrl + alt + h
@@ -40,7 +40,7 @@ alt + Print
     ~/.config/bspwm/scripts/screenshot.sh window
 
 super + e
-    thunar
+    kitty -e yazi
 
 # Rofi
 ctrl + alt + d
