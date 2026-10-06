@@ -1,0 +1,19 @@
+[Configuration]
+FontName=DejaVu Sans Mono 11
+
+ColorBackground=#0B0C0F
+ColorForeground=#E6E6E6
+ColorCursor=#00E6D0
+ColorBold=#E6E6E6
+ColorBoldUseDefault=FALSE
+
+ColorCursorUseDefault=FALSE
+ColorSelectionUseDefault=FALSE
+ColorSelection=#00E6D0
+ColorSelectionBackground=#202020
+
+ColorPalette=#0B0C0F;#E06C75;#00E6D0;#707780;#5C8DFF;#A88BFA;#00E6D0;#E6E6E6;#202020;#FF6B6B;#33D6C6;#AAB0B8;#76A7FF;#C79AFF;#33FFE8;#FFFFFF
+ColorUseTheme=FALSE
+
+MiscCursorBlinks=FALSE
+MiscCursorShape=TERMINAL_CURSOR_SHAPE_BLOCK

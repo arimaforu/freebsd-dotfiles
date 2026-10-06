@@ -1,8 +1,8 @@
 * {
-    bg: #08090b;
-    fg: #e6e6e6;
+    bg: #0B0C0F;
+    fg: #E6E6E6;
     muted: #707780;
-    accent: #00e6d0;
+    accent: #00E6D0;
 
     background-color: @bg;
     text-color: @fg;
@@ -14,7 +14,7 @@ window {
     height: 320px;
     background-color: @bg;
     border: 1px;
-    border-color: #24282d;
+    border-color: #202020;
     padding: 16px;
 }
 
@@ -75,7 +75,7 @@ element selected {
 element selected element-text {
     background-color: transparent;
     text-color: @accent;
-    highlight: bold #00e6d0;
+    highlight: bold #00E6D0;
 }
 
 message {

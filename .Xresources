@@ -14,7 +14,7 @@ XTerm*scrollBar: false
 XTerm*saveLines: 5000
 XTerm*selectToClipboard: false
 
-XTerm*highlightTextColor: #080808
+XTerm*highlightTextColor: #0B0C0F
 XTerm*highlightColor: #00E6D0
 
 XTerm*cursorShape: block
